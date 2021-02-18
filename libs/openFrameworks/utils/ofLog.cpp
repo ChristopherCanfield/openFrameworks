@@ -42,8 +42,8 @@ void ofSetLogLevel(ofLogLevel level){
 }
 
 //--------------------------------------------------
-void ofSetLogLevel(string module, ofLogLevel level){
-	getModules()[module] = level;
+void ofSetLogLevel(string moduleName, ofLogLevel level){
+	getModules()[moduleName] = level;
 }
 
 //--------------------------------------------------
@@ -52,11 +52,11 @@ ofLogLevel ofGetLogLevel(){
 }
 
 //--------------------------------------------------
-ofLogLevel ofGetLogLevel(string module){
-	if (getModules().find(module) == getModules().end()) {
+ofLogLevel ofGetLogLevel(string moduleName){
+	if (getModules().find(moduleName) == getModules().end()) {
 		return currentLogLevel;
 	} else {
-		return getModules()[module];
+		return getModules()[moduleName];
 	}
 }
 
@@ -79,14 +79,14 @@ void ofLogToDebugView() {
 //--------------------------------------------------
 ofLog::ofLog(){
 	level = OF_LOG_NOTICE;
-	module = "";
+	moduleName = "";
 	bPrinted = false;
 }
 		
 //--------------------------------------------------
 ofLog::ofLog(ofLogLevel _level){
 	level = _level;
-	module = "";
+	moduleName = "";
 	bPrinted = false;
 }
 
@@ -122,30 +122,30 @@ void ofLog::setAutoSpace(bool autoSpace){
 ofLog::~ofLog(){
 	// don't log if we printed in the constructor already
 	if(!bPrinted){
-		_log(level,module,message.str());
+		_log(level,moduleName,message.str());
 	}
 }
 
-bool ofLog::checkLog(ofLogLevel level, const string & module){
-	if(getModules().find(module)==getModules().end()){
+bool ofLog::checkLog(ofLogLevel level, const string & moduleName){
+	if(getModules().find(moduleName)==getModules().end()){
 		if(level >= currentLogLevel) return true;
 	}else{
-		if(level >= getModules()[module]) return true;
+		if(level >= getModules()[moduleName]) return true;
 	}
 	return false;
 }
 
 //-------------------------------------------------------
-void ofLog::_log(ofLogLevel level, const string & module, const string & message){
-	if(checkLog(level,module)){
-		channel()->log(level,module, message);
+void ofLog::_log(ofLogLevel level, const string & moduleName, const string & message){
+	if(checkLog(level,moduleName)){
+		channel()->log(level,moduleName, message);
 	}
 }
 
 //--------------------------------------------------
 ofLogVerbose::ofLogVerbose(const string & _module){
 	level = OF_LOG_VERBOSE;
-	module = _module;
+	moduleName = _module;
 	bPrinted=false;
 }
 
@@ -154,11 +154,11 @@ ofLogVerbose::ofLogVerbose(const string & _module, const string & _message){
 	bPrinted = true;
 }
 
-ofLogVerbose::ofLogVerbose(const string & module, const char* format, ...){
-	if(checkLog(OF_LOG_VERBOSE, module)){
+ofLogVerbose::ofLogVerbose(const string & moduleName, const char* format, ...){
+	if(checkLog(OF_LOG_VERBOSE, moduleName)){
 		va_list args;
 		va_start(args, format);
-		channel()->log(OF_LOG_VERBOSE, module, format, args);
+		channel()->log(OF_LOG_VERBOSE, moduleName, format, args);
 		va_end(args);
 	}
 	bPrinted = true;
@@ -167,7 +167,7 @@ ofLogVerbose::ofLogVerbose(const string & module, const char* format, ...){
 //--------------------------------------------------
 ofLogNotice::ofLogNotice(const string & _module){
 	level = OF_LOG_NOTICE;
-	module = _module;
+	moduleName = _module;
 	bPrinted=false;
 }
 
@@ -176,11 +176,11 @@ ofLogNotice::ofLogNotice(const string & _module, const string & _message){
 	bPrinted = true;
 }
 
-ofLogNotice::ofLogNotice(const string & module, const char* format, ...){
-	if(checkLog(OF_LOG_NOTICE, module)){
+ofLogNotice::ofLogNotice(const string & moduleName, const char* format, ...){
+	if(checkLog(OF_LOG_NOTICE, moduleName)){
 		va_list args;
 		va_start(args, format);
-		channel()->log(OF_LOG_NOTICE, module, format, args);
+		channel()->log(OF_LOG_NOTICE, moduleName, format, args);
 		va_end(args);
 	}
 	bPrinted = true;
@@ -189,7 +189,7 @@ ofLogNotice::ofLogNotice(const string & module, const char* format, ...){
 //--------------------------------------------------
 ofLogWarning::ofLogWarning(const string & _module){
 	level = OF_LOG_WARNING;
-	module = _module;
+	moduleName = _module;
 	bPrinted=false;
 }
 
@@ -198,11 +198,11 @@ ofLogWarning::ofLogWarning(const string & _module, const string & _message){
 	bPrinted = true;
 }
 
-ofLogWarning::ofLogWarning(const string & module, const char* format, ...){
-	if(checkLog(OF_LOG_WARNING, module)){
+ofLogWarning::ofLogWarning(const string & moduleName, const char* format, ...){
+	if(checkLog(OF_LOG_WARNING, moduleName)){
 		va_list args;
 		va_start(args, format);
-		channel()->log(OF_LOG_WARNING, module, format, args);
+		channel()->log(OF_LOG_WARNING, moduleName, format, args);
 		va_end(args);
 	}
 	bPrinted = true;
@@ -211,7 +211,7 @@ ofLogWarning::ofLogWarning(const string & module, const char* format, ...){
 //--------------------------------------------------
 ofLogError::ofLogError(const string & _module){
 	level = OF_LOG_ERROR;
-	module = _module;
+	moduleName = _module;
 	bPrinted=false;
 }
 
@@ -220,11 +220,11 @@ ofLogError::ofLogError(const string & _module, const string & _message){
 	bPrinted = true;
 }
 
-ofLogError::ofLogError(const string & module, const char* format, ...){
-	if(checkLog(OF_LOG_ERROR, module)){
+ofLogError::ofLogError(const string & moduleName, const char* format, ...){
+	if(checkLog(OF_LOG_ERROR, moduleName)){
 		va_list args;
 		va_start(args, format);
-		channel()->log(OF_LOG_ERROR, module, format, args);
+		channel()->log(OF_LOG_ERROR, moduleName, format, args);
 		va_end(args);
 	}
 	bPrinted = true;
@@ -233,7 +233,7 @@ ofLogError::ofLogError(const string & module, const char* format, ...){
 //--------------------------------------------------
 ofLogFatalError::ofLogFatalError(const string &  _module){
 	level = OF_LOG_FATAL_ERROR;
-	module = _module;
+	moduleName = _module;
 	bPrinted=false;
 }
 
@@ -242,11 +242,11 @@ ofLogFatalError::ofLogFatalError(const string & _module, const string & _message
 	bPrinted = true;
 }
 
-ofLogFatalError::ofLogFatalError(const string & module, const char* format, ...){
-	if(checkLog(OF_LOG_FATAL_ERROR, module)){
+ofLogFatalError::ofLogFatalError(const string & moduleName, const char* format, ...){
+	if(checkLog(OF_LOG_FATAL_ERROR, moduleName)){
 		va_list args;
 		va_start(args, format);
-		channel()->log(OF_LOG_FATAL_ERROR, module, format, args);
+		channel()->log(OF_LOG_FATAL_ERROR, moduleName, format, args);
 		va_end(args);
 	}
 	bPrinted = true;
@@ -289,31 +289,31 @@ string ofGetLogLevelName(ofLogLevel level, bool pad){
 }
 
 //--------------------------------------------------
-void ofConsoleLoggerChannel::log(ofLogLevel level, const string & module, const string & message){
+void ofConsoleLoggerChannel::log(ofLogLevel level, const string & moduleName, const string & message){
 	// print to cerr for OF_LOG_ERROR and OF_LOG_FATAL_ERROR, everything else to cout 
 	ostream& out = level < OF_LOG_ERROR ? cout : cerr;
 	out << "[" << ofGetLogLevelName(level, true)  << "] ";
-	// only print the module name if it's not ""
-	if(module != ""){
-		out << module << ": ";
+	// only print the moduleName name if it's not ""
+	if(moduleName != ""){
+		out << moduleName << ": ";
 	}
 	out << message << endl;
 }
 
-void ofConsoleLoggerChannel::log(ofLogLevel level, const string & module, const char* format, ...){
+void ofConsoleLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, ...){
 	va_list args;
 	va_start(args, format);
-	log(level, module, format, args);
+	log(level, moduleName, format, args);
 	va_end(args);
 }
 
-void ofConsoleLoggerChannel::log(ofLogLevel level, const string & module, const char* format, va_list args){
+void ofConsoleLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, va_list args){
 	//thanks stefan!
 	//http://www.ozzu.com/cpp-tutorials/tutorial-writing-custom-printf-wrapper-function-t89166.html
 	FILE* out = level < OF_LOG_ERROR ? stdout : stderr;
 	fprintf(out, "[%s] ", ofGetLogLevelName(level, true).c_str());
-	if(module != ""){
-		fprintf(out, "%s: ", module.c_str());
+	if(moduleName != ""){
+		fprintf(out, "%s: ", moduleName.c_str());
 	}
 	vfprintf(out, format, args);
 	fprintf(out, "\n");
@@ -322,31 +322,31 @@ void ofConsoleLoggerChannel::log(ofLogLevel level, const string & module, const 
 
 #ifdef TARGET_WIN32
 #include <array>
-void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & module, const string & message) {
+void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & moduleName, const string & message) {
 	// print to cerr for OF_LOG_ERROR and OF_LOG_FATAL_ERROR, everything else to cout 
 	stringstream out;
 	out << "[" << ofGetLogLevelName(level, true) << "] ";
-	// only print the module name if it's not ""
-	if (module != "") {
-		out << module << ": ";
+	// only print the moduleName name if it's not ""
+	if (moduleName != "") {
+		out << moduleName << ": ";
 	}
 	out << message << endl;
 	OutputDebugStringA(out.str().c_str());
 }
 
-void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & module, const char* format, ...) {
+void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, ...) {
 	va_list args;
 	va_start(args, format);
-	log(level, module, format, args);
+	log(level, moduleName, format, args);
 	va_end(args);
 
 }
 
-void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & module, const char* format, va_list args) {
+void ofDebugViewLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, va_list args) {
 	std::string buffer;;
 	buffer =  "[" + ofGetLogLevelName(level, true) + "] ";
-	if (module != "") {
-		buffer += module + ": ";
+	if (moduleName != "") {
+		buffer += moduleName + ": ";
 	}
 	buffer += ofVAArgsToString(format, args);
 	buffer += "\n";
@@ -377,25 +377,25 @@ void ofFileLoggerChannel::setFile(const std::filesystem::path & path,bool append
 	file << "--------------------------------------- " << ofGetTimestampString() << endl;
 }
 
-void ofFileLoggerChannel::log(ofLogLevel level, const string & module, const string & message){
+void ofFileLoggerChannel::log(ofLogLevel level, const string & moduleName, const string & message){
 	file << "[" << ofGetLogLevelName(level, true) << "] ";
-	if(module != ""){
-		file << module << ": ";
+	if(moduleName != ""){
+		file << moduleName << ": ";
 	}
 	file << message << endl;
 }
 
-void ofFileLoggerChannel::log(ofLogLevel level, const string & module, const char* format, ...){
+void ofFileLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, ...){
 	va_list args;
 	va_start(args, format);
-	log(level, module, format, args);
+	log(level, moduleName, format, args);
 	va_end(args);
 }
 
-void ofFileLoggerChannel::log(ofLogLevel level, const string & module, const char* format, va_list args){
+void ofFileLoggerChannel::log(ofLogLevel level, const string & moduleName, const char* format, va_list args){
 	file << "[" << ofGetLogLevelName(level, true) << "] ";
-	if(module != ""){
-		file << module << ": ";
+	if(moduleName != ""){
+		file << moduleName << ": ";
 	}
 	file << ofVAArgsToString(format,args) << endl;
 }

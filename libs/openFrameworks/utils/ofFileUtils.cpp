@@ -762,13 +762,16 @@ bool ofFile::isHidden() const {
 #endif
 }
 
+
 //------------------------------------------------------------------------------------------------------------
 void ofFile::setWriteable(bool flag){
 	try{
 		if(flag){
-			std::filesystem::permissions(myFile,std::filesystem::perms::owner_write | std::filesystem::perms::add_perms);
+			//std::filesystem::permissions(myFile,std::filesystem::perms::owner_write | std::experimental::filesystem::perms::add_perms);
+			std::filesystem::permissions(myFile,std::filesystem::perms::owner_write, std::filesystem::perm_options::add);
 		}else{
-			std::filesystem::permissions(myFile,std::filesystem::perms::owner_write | std::filesystem::perms::remove_perms);
+			//std::filesystem::permissions(myFile,std::filesystem::perms::owner_write | std::filesystem::perms::remove_perms);
+			std::filesystem::permissions(myFile,std::filesystem::perms::owner_write, std::filesystem::perm_options::remove);
 		}
 	}catch(std::exception & e){
 		ofLogError() << "Couldn't set write permission on " << myFile << ": " << e.what();
@@ -785,9 +788,11 @@ void ofFile::setReadOnly(bool flag){
 void ofFile::setReadable(bool flag){
 	try{
 		if(flag){
-			std::filesystem::permissions(myFile,std::filesystem::perms::owner_read | std::filesystem::perms::add_perms);
+			//std::filesystem::permissions(myFile,std::filesystem::perms::owner_read | std::filesystem::perms::add_perms);
+			std::filesystem::permissions(myFile,std::filesystem::perms::owner_read, std::filesystem::perm_options::add);
 		}else{
-			std::filesystem::permissions(myFile,std::filesystem::perms::owner_read | std::filesystem::perms::remove_perms);
+			//std::filesystem::permissions(myFile,std::filesystem::perms::owner_read | std::filesystem::perms::remove_perms);
+			std::filesystem::permissions(myFile,std::filesystem::perms::owner_read, std::filesystem::perm_options::remove);
 		}
 	}catch(std::exception & e){
 		ofLogError() << "Couldn't set read permission on " << myFile << ": " << e.what();
@@ -799,9 +804,11 @@ void ofFile::setExecutable(bool flag){
 	try{
 #if OF_USING_STD_FS
 		if(flag){
-			std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec | std::filesystem::perms::add_perms);
+			/*std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec | std::filesystem::perms::add_perms);*/
+			std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec, std::filesystem::perm_options::add);
 		} else{
-			std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec | std::filesystem::perms::remove_perms);
+			//std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec | std::filesystem::perms::remove_perms);
+			std::filesystem::permissions(myFile, std::filesystem::perms::owner_exec, std::filesystem::perm_options::remove);
 		}
 #else
 		if(flag){
@@ -1561,26 +1568,26 @@ vector<ofFile>::const_reverse_iterator ofDirectory::rend() const{
 
 //------------------------------------------------------------------------------------------------------------
 string ofFilePath::addLeadingSlash(const std::filesystem::path& _path){
-    auto path = _path.string();
+    auto path = _path;
 	auto sep = std::filesystem::path("/").make_preferred();
 	if(!path.empty()){
-		if(ofToString(path[0]) != sep.string()){
-			path = (sep / path).string();
+		if(ofToString(path.string()[0]) != sep.string()){
+			path = sep / path;
 		}
 	}
-	return path;
+	return path.string();
 }
 
 //------------------------------------------------------------------------------------------------------------
 string ofFilePath::addTrailingSlash(const std::filesystem::path& _path){
-    auto path = std::filesystem::path(_path).make_preferred().string();
-	auto sep = std::filesystem::path("/").make_preferred();
+    auto path = std::filesystem::path(_path).make_preferred();
+	auto sep = std::filesystem::path("/").make_preferred().string();
 	if(!path.empty()){
-		if(ofToString(path.back()) != sep.string()){
-			path = (path / sep).string();
+		if(ofToString(path.string().back()) != sep){
+			path += sep;
 		}
 	}
-	return path;
+	return path.string();
 }
 
 

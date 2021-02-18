@@ -11,6 +11,9 @@
 		}
 #	else
 #		include <filesystem>
+		// (2021-01-23 cdc): error C4996 / warning STL4015
+#		define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+#		pragma warning(disable : 4996)
 #	endif
 #else
 #	if !_MSC_VER

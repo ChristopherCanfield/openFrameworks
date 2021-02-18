@@ -419,7 +419,8 @@ bool ofSerial::setup(string portName, int baud){
 		swprintf(buf, L"baud=%d parity=N data=8 stop=1", bps);
 
 		if(!BuildCommDCBW(buf, &cfg.dcb)){
-			ofLogError("ofSerial") << "setup(): unable to build comm dcb, (" << buf << ")";
+			// (1/23/2021 cdc): error C2280: 'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const wchar_t *)': attempting to reference a deleted function
+			//ofLogError("ofSerial") << "setup(): unable to build comm dcb, (" << buf << ")";
 		}
 
 		// Set baudrate and bits etc.

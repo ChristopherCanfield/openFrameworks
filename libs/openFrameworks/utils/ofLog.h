@@ -216,7 +216,7 @@ ofLogLevel ofGetLogLevel();
 /// \brief Get the logging level for a specific module.
 /// \param module specific module name.
 /// \returns The currently set specific module logging level.
-ofLogLevel ofGetLogLevel(std::string module);
+ofLogLevel ofGetLogLevel(std::string moduleName);
 
 /// \brief Get log level name as a string.
 /// \param level The ofLogLevel you want as a string.
@@ -503,19 +503,19 @@ class ofLog{
 
 		ofLogLevel level; ///< Log level.
 		bool bPrinted;	  ///< Has the message been printed in the constructor?
-		std::string module;    ///< The destination module for this message.
+		std::string moduleName;    ///< The destination module for this message.
 		
 		/// \brief Print a log line.
 		/// \param level The log level.
 		/// \param module The target module.
 		/// \param message The log message.
-		void _log(ofLogLevel level, const std::string & module, const std::string & message);
+		void _log(ofLogLevel level, const std::string & moduleName, const std::string & message);
 	
 		/// \brief Determine if the given module is active at the given log level.
 		/// \param level The log level.
 		/// \param module The target module.
 		/// \returns true if the given module is active at the given log level.
-		bool checkLog(ofLogLevel level, const std::string & module);
+		bool checkLog(ofLogLevel level, const std::string & moduleName);
 	
 		static std::shared_ptr<ofBaseLoggerChannel> & channel();	///< The target channel.
 	
@@ -540,17 +540,17 @@ class ofLogVerbose : public ofLog{
 	public:
 		/// \brief Create a verbose log message.
 		/// \param module The target module.
-		ofLogVerbose(const std::string &module="");
+		ofLogVerbose(const std::string &moduleName="");
 
 		/// \brief Create a verbose log message.
 		/// \param module The target module.
 		/// \param message The log message.
-		ofLogVerbose(const std::string & module, const std::string & message);
+		ofLogVerbose(const std::string & moduleName, const std::string & message);
 
 		/// \brief Create a verbose log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		ofLogVerbose(const std::string & module, const char* format, ...) OF_PRINTF_ATTR(3, 4);
+		ofLogVerbose(const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(3, 4);
 };
 
 /// \brief Derived log class for easy notice logging.
@@ -560,17 +560,17 @@ class ofLogNotice : public ofLog{
 	public:
 		/// \brief Create a notice log message.
 		/// \param module The target module.
-		ofLogNotice(const std::string & module="");
+		ofLogNotice(const std::string & moduleName="");
 
 		/// \brief Create a notice log message.
 		/// \param module The target module.
 		/// \param message The log message.
-		ofLogNotice(const std::string & module, const std::string & message);
+		ofLogNotice(const std::string & moduleName, const std::string & message);
 
 		/// \brief Create a notice log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		ofLogNotice(const std::string & module, const char* format, ...) OF_PRINTF_ATTR(3, 4);
+		ofLogNotice(const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(3, 4);
 };
 
 /// \brief Derived log class for easy warning logging.
@@ -580,16 +580,16 @@ class ofLogWarning : public ofLog{
 	public:
 	/// \brief Create a verbose log message.
 	/// \param module The target module.
-		ofLogWarning(const std::string & module="");
+		ofLogWarning(const std::string & moduleName="");
 	/// \brief Create a verbose log message.
 	/// \param module The target module.
 	/// \param message The log message.
-		ofLogWarning(const std::string & module, const std::string & message);
+		ofLogWarning(const std::string & moduleName, const std::string & message);
 	
 	/// \brief Create a verbose log message.
 	/// \param module The target module.
 	/// \param format The printf-style format string.
-		ofLogWarning(const std::string & module, const char* format, ...) OF_PRINTF_ATTR(3, 4);
+		ofLogWarning(const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(3, 4);
 };
 
 /// \brief Derived log class for easy error logging.
@@ -599,17 +599,17 @@ class ofLogError : public ofLog{
 	public:
 		/// \brief Create a error log message.
 		/// \param module The target module.
-		ofLogError(const std::string & module="");
+		ofLogError(const std::string & moduleName="");
 	
 		/// \brief Create a error log message.
 		/// \param module The target module.
 		/// \param message The log message.
-		ofLogError(const std::string & module, const std::string & message);
+		ofLogError(const std::string & moduleName, const std::string & message);
 	
 		/// \brief Create a error log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		ofLogError(const std::string & module, const char* format, ...) OF_PRINTF_ATTR(3, 4);
+		ofLogError(const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(3, 4);
 };
 
 /// \brief Derived log class for easy fatal error logging.
@@ -619,17 +619,17 @@ class ofLogFatalError : public ofLog{
 	public:
 		/// \brief Create a fatal error log message.
 		/// \param module The target module.
-		ofLogFatalError(const std::string & module="");
+		ofLogFatalError(const std::string & moduleName="");
 
 		/// \brief Create a fatal error log message.
 		/// \param module The target module.
 		/// \param message The log message.
-		ofLogFatalError(const std::string & module, const std::string & message);
+		ofLogFatalError(const std::string & moduleName, const std::string & message);
 	
 		/// \brief Create a fatal error log message.
 		/// \param module The target module.
 		/// \param format The printf-style format string.
-		ofLogFatalError(const std::string & module, const char* format, ...) OF_PRINTF_ATTR(3, 4);
+		ofLogFatalError(const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(3, 4);
 };
 
 
@@ -651,20 +651,20 @@ public:
 	/// \param level The log level.
 	/// \param module The target module.
 	/// \param message The log message.
-	virtual void log(ofLogLevel level, const std::string & module, const std::string & message)=0;
+	virtual void log(ofLogLevel level, const std::string & moduleName, const std::string & message)=0;
 
 	/// \brief Log a message.
 	/// \param level The log level.
 	/// \param module The target module.
 	/// \param format The printf-style format string.
-	virtual void log(ofLogLevel level, const std::string & module, const char* format, ...)  OF_PRINTF_ATTR(4, 5) =0;
+	virtual void log(ofLogLevel level, const std::string & moduleName, const char* format, ...)  OF_PRINTF_ATTR(4, 5) =0;
 
 	/// \brief Log a message.
 	/// \param level The log level.
 	/// \param module The target module.
 	/// \param format The printf-style format string.
 	/// \param args the list of printf-style arguments.
-	virtual void log(ofLogLevel level, const std::string & module, const char* format, va_list args)=0;
+	virtual void log(ofLogLevel level, const std::string & moduleName, const char* format, va_list args)=0;
 };
 
 /// \brief A logger channel that logs its messages to the console.
@@ -672,9 +672,9 @@ class ofConsoleLoggerChannel: public ofBaseLoggerChannel{
 public:
 	/// \brief Destroy the console logger channel.
 	virtual ~ofConsoleLoggerChannel(){};
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
-	void log(ofLogLevel level, const std::string & module, const char* format, ...) OF_PRINTF_ATTR(4, 5);
-	void log(ofLogLevel level, const std::string & module, const char* format, va_list args);
+	void log(ofLogLevel level, const std::string & moduleName, const std::string & message);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(4, 5);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, va_list args);
 };
 
 #ifdef TARGET_WIN32
@@ -683,9 +683,9 @@ class ofDebugViewLoggerChannel : public ofBaseLoggerChannel {
 public:
 	/// \brief Destroy the console logger channel.
 	virtual ~ofDebugViewLoggerChannel() {};
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
-	void log(ofLogLevel level, const std::string & module, const char* format, ...) OF_PRINTF_ATTR(4, 5);
-	void log(ofLogLevel level, const std::string & module, const char* format, va_list args);
+	void log(ofLogLevel level, const std::string & moduleName, const std::string & message);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(4, 5);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, va_list args);
 };
 #endif
 
@@ -708,9 +708,9 @@ public:
 	/// \param append True if the log data should be added to an existing file.
     void setFile(const std::filesystem::path & path,bool append=false);
 
-	void log(ofLogLevel level, const std::string & module, const std::string & message);
-	void log(ofLogLevel level, const std::string & module, const char* format, ...) OF_PRINTF_ATTR(4, 5);
-	void log(ofLogLevel level, const std::string & module, const char* format, va_list args);
+	void log(ofLogLevel level, const std::string & moduleName, const std::string & message);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, ...) OF_PRINTF_ATTR(4, 5);
+	void log(ofLogLevel level, const std::string & moduleName, const char* format, va_list args);
 
 	/// \brief CLose the log file.
 	void close();
