@@ -51,6 +51,9 @@ tests/**/gcc-release/
 *.cpp.elf
 *.cpp.hex
 
+projectGenerator-vs/
+
+
 #########################
 # IDE
 #########################
@@ -77,6 +80,7 @@ xcuserdata
 *.ilk
 *.aps
 ipch/
+.vs/
 
 # Eclipse
 .metadata
